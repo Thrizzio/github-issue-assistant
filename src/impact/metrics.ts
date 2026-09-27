@@ -2,12 +2,12 @@ export type CategoricalLevel = "LOW" | "MEDIUM" | "HIGH";
 
 export const IMPACT_THRESHOLDS = {
   referenceFanOut: {
-    lowMax: 4,      // < 5 is LOW
-    mediumMax: 20,  // 5 - 20 is MEDIUM, > 20 is HIGH
+    lowMax: 4, // < 5 is LOW
+    mediumMax: 20, // 5 - 20 is MEDIUM, > 20 is HIGH
   },
   historicalChurn: {
-    lowMax: 2,      // < 3 commits is LOW
-    mediumMax: 10,  // 3 - 10 commits is MEDIUM, > 10 is HIGH
+    lowMax: 2, // < 3 commits is LOW
+    mediumMax: 10, // 3 - 10 commits is MEDIUM, > 10 is HIGH
   },
 } as const;
 
@@ -33,7 +33,10 @@ export function classifyFanOut(totalReferences: number): {
   };
 }
 
-export function classifyChurn(commitCount: number, months: number): {
+export function classifyChurn(
+  commitCount: number,
+  months: number,
+): {
   level: CategoricalLevel;
   evidence: string;
 } {

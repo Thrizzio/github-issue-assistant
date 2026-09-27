@@ -1,5 +1,5 @@
 import { Node, ReferencedSymbol } from "ts-morph";
-import { normalizePath, toRelativePath } from "../utils/paths.js";
+import { toRelativePath } from "../utils/paths.js";
 import { DiscoveredSymbol } from "./symbols.js";
 
 export type ReferenceType = "call" | "import" | "reference" | "type_reference";
@@ -108,7 +108,10 @@ export class ReferenceAnalyzer {
                 Node.isNamespaceImport(parent))
             ) {
               refType = "import";
-            } else if (parent && (Node.isTypeReference(parent) || Node.isTypeAliasDeclaration(parent))) {
+            } else if (
+              parent &&
+              (Node.isTypeReference(parent) || Node.isTypeAliasDeclaration(parent))
+            ) {
               refType = "type_reference";
             }
 
@@ -146,7 +149,9 @@ export class ReferenceAnalyzer {
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        onWarning?.(`Failed to resolve references for symbol ${sym.name} in ${sym.filePath}: ${msg}`);
+        onWarning?.(
+          `Failed to resolve references for symbol ${sym.name} in ${sym.filePath}: ${msg}`,
+        );
       }
 
       summaries.set(symKey, {

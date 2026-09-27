@@ -17,9 +17,7 @@ export class EvidenceValidator {
       return { valid: true, graph };
     } catch (err) {
       if (err instanceof ZodError) {
-        const errors = err.errors.map(
-          (e) => `[${e.path.join(".") || "root"}]: ${e.message}`,
-        );
+        const errors = err.errors.map((e) => `[${e.path.join(".") || "root"}]: ${e.message}`);
         return { valid: false, errors };
       }
       return { valid: false, errors: [String(err)] };

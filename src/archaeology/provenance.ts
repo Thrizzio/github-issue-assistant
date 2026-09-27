@@ -23,9 +23,7 @@ export class ProvenanceAnalyzer {
   /**
    * Discovers historical origin and modifying commits for candidate symbols.
    */
-  async analyzeSymbolProvenance(
-    symbol: DiscoveredSymbol,
-  ): Promise<SymbolProvenance> {
+  async analyzeSymbolProvenance(symbol: DiscoveredSymbol): Promise<SymbolProvenance> {
     try {
       // 1. Try git log -S for the exact symbol name
       const pickaxeCommits = await this.git.logPickaxe(symbol.name, symbol.filePath);
@@ -65,12 +63,7 @@ export class ProvenanceAnalyzer {
       }
 
       // Best-effort PR association for introducing commit
-      if (
-        probableIntroducingCommit &&
-        this.prService &&
-        this.owner &&
-        this.repo
-      ) {
+      if (probableIntroducingCommit && this.prService && this.owner && this.repo) {
         const pr = await this.prService.getPRForCommit(
           this.owner,
           this.repo,

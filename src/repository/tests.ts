@@ -43,8 +43,7 @@ export class TestDiscovery {
     }
 
     // 1. Check references in referenceSummaries:
-    // If a reference is inside a test file, that test file is a direct test of the symbol!
-    for (const [symKey, summary] of referenceSummaries.entries()) {
+    for (const summary of referenceSummaries.values()) {
       for (const ref of summary.references) {
         if (isTestFile(ref.sourceFile)) {
           if (!directTestsMap.has(ref.sourceFile)) {
@@ -65,7 +64,11 @@ export class TestDiscovery {
 
       const normTest = normalizePath(testFile).toLowerCase();
       for (const sFile of symbolFiles) {
-        const baseName = sFile.split("/").pop()?.replace(/\.(ts|tsx|js|jsx)$/, "") ?? "";
+        const baseName =
+          sFile
+            .split("/")
+            .pop()
+            ?.replace(/\.(ts|tsx|js|jsx)$/, "") ?? "";
         if (baseName.length > 2) {
           const testBase = normTest.split("/").pop() ?? "";
           if (
@@ -84,7 +87,11 @@ export class TestDiscovery {
       // Check caller tests via naming
       if (!directTestsMap.has(testFile) && !callerTestsMap.has(testFile)) {
         for (const cFile of callerFiles) {
-          const baseName = cFile.split("/").pop()?.replace(/\.(ts|tsx|js|jsx)$/, "") ?? "";
+          const baseName =
+            cFile
+              .split("/")
+              .pop()
+              ?.replace(/\.(ts|tsx|js|jsx)$/, "") ?? "";
           if (baseName.length > 2) {
             const testBase = normTest.split("/").pop() ?? "";
             if (

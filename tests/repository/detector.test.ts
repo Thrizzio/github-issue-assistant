@@ -34,9 +34,7 @@ describe("parseGitHubUrl", () => {
   });
 
   it("throws GitRemoteError for non-GitHub URLs", () => {
-    expect(() => parseGitHubUrl("https://gitlab.com/owner/repo.git")).toThrow(
-      GitRemoteError,
-    );
+    expect(() => parseGitHubUrl("https://gitlab.com/owner/repo.git")).toThrow(GitRemoteError);
   });
 
   it("throws GitRemoteError for invalid string", () => {

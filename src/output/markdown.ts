@@ -21,7 +21,9 @@ export class MarkdownReportGenerator {
     lines.push(`- **URL**: [Issue #${evidence.issue.number}](${evidence.issue.url})`);
     lines.push(`- **State**: \`${evidence.issue.state}\``);
     lines.push(`- **Author**: @${evidence.issue.author}`);
-    lines.push(`- **Labels**: ${evidence.issue.labels.length > 0 ? evidence.issue.labels.map((l) => `\`${l}\``).join(", ") : "_None_"}`);
+    lines.push(
+      `- **Labels**: ${evidence.issue.labels.length > 0 ? evidence.issue.labels.map((l) => `\`${l}\``).join(", ") : "_None_"}`,
+    );
     lines.push("");
 
     // Section 2: Observed Problem
@@ -36,7 +38,9 @@ export class MarkdownReportGenerator {
     lines.push("Relevant symbols and files discovered via deterministic AST indexing:");
     lines.push("");
     if (evidence.symbols.length === 0) {
-      lines.push("_No specific TypeScript/JavaScript candidate symbols matched the issue criteria._");
+      lines.push(
+        "_No specific TypeScript/JavaScript candidate symbols matched the issue criteria._",
+      );
     } else {
       lines.push("| Symbol | Kind | File | Range | Confidence | References | Reason |");
       lines.push("| --- | --- | --- | --- | --- | --- | --- |");
@@ -56,7 +60,9 @@ export class MarkdownReportGenerator {
       lines.push("Discovered relationships between candidate files and callers:");
       lines.push("");
       for (const rel of evidence.relationships) {
-        lines.push(`- \`${rel.from}\` **${rel.type}** \`${rel.to}\`${rel.context ? ` (${rel.context})` : ""}`);
+        lines.push(
+          `- \`${rel.from}\` **${rel.type}** \`${rel.to}\`${rel.context ? ` (${rel.context})` : ""}`,
+        );
       }
     }
     lines.push("");
@@ -72,8 +78,12 @@ export class MarkdownReportGenerator {
         lines.push(`- **Evidence**: ${prov.introductionEvidence}`);
         if (prov.probableIntroducingCommit) {
           const c = prov.probableIntroducingCommit;
-          const prStr = c.associatedPR ? ` (PR [#${c.associatedPR.number}](${c.associatedPR.url}))` : "";
-          lines.push(`- **Probable Introducing Commit**: \`${c.shortSha}\` by ${c.author} on ${c.date}${prStr}`);
+          const prStr = c.associatedPR
+            ? ` (PR [#${c.associatedPR.number}](${c.associatedPR.url}))`
+            : "";
+          lines.push(
+            `- **Probable Introducing Commit**: \`${c.shortSha}\` by ${c.author} on ${c.date}${prStr}`,
+          );
           lines.push(`  - Message: "${c.message}"`);
         }
         if (prov.recentModifyingCommits.length > 0) {
@@ -89,7 +99,9 @@ export class MarkdownReportGenerator {
     // Section 6: Likely Implementation Surface
     lines.push("## Likely Implementation Surface");
     if (brief.implementationSurface.length === 0) {
-      lines.push("_No specific implementation surface could be confirmed from available evidence._");
+      lines.push(
+        "_No specific implementation surface could be confirmed from available evidence._",
+      );
     } else {
       for (const item of brief.implementationSurface) {
         lines.push(`### [${item.confidence}] ${item.claim}`);
@@ -116,11 +128,19 @@ export class MarkdownReportGenerator {
     lines.push("## Impact Profile");
     lines.push(`- **Overall Impact**: \`${evidence.impactProfile.overallImpact.level}\``);
     lines.push(`  - Rationale: ${evidence.impactProfile.overallImpact.rationale}`);
-    lines.push(`- **Reference Fan-Out**: \`${evidence.impactProfile.referenceFanOut.level}\` (${evidence.impactProfile.referenceFanOut.evidence})`);
-    lines.push(`- **Historical Churn**: \`${evidence.impactProfile.historicalChurn.level}\` (${evidence.impactProfile.historicalChurn.evidence})`);
-    lines.push(`- **Validation Surface**: \`${evidence.impactProfile.validationSurface.level}\` (${evidence.impactProfile.validationSurface.evidence})`);
+    lines.push(
+      `- **Reference Fan-Out**: \`${evidence.impactProfile.referenceFanOut.level}\` (${evidence.impactProfile.referenceFanOut.evidence})`,
+    );
+    lines.push(
+      `- **Historical Churn**: \`${evidence.impactProfile.historicalChurn.level}\` (${evidence.impactProfile.historicalChurn.evidence})`,
+    );
+    lines.push(
+      `- **Validation Surface**: \`${evidence.impactProfile.validationSurface.level}\` (${evidence.impactProfile.validationSurface.evidence})`,
+    );
     lines.push("");
-    lines.push("> *Note: Validation Surface reflects test file existence and reference evidence, NOT percentage line coverage.*");
+    lines.push(
+      "> *Note: Validation Surface reflects test file existence and reference evidence, NOT percentage line coverage.*",
+    );
     lines.push("");
 
     // Section 9: Validation Strategy

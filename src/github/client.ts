@@ -38,12 +38,18 @@ export class GitHubClient {
    * Translates Octokit HTTP errors into typed domain errors.
    */
   handleApiError(error: unknown, owner: string, repo: string, issueNumber?: number): never {
-    const err = error as { status?: number; message?: string; response?: { headers?: Record<string, string> } };
+    const err = error as {
+      status?: number;
+      message?: string;
+      response?: { headers?: Record<string, string> };
+    };
 
     if (err.status === 401 || err.status === 403) {
       if (err.response?.headers?.["x-ratelimit-remaining"] === "0") {
         const resetHeader = err.response.headers["x-ratelimit-reset"];
-        const resetDate = resetHeader ? new Date(Number(resetHeader) * 1000).toISOString() : undefined;
+        const resetDate = resetHeader
+          ? new Date(Number(resetHeader) * 1000).toISOString()
+          : undefined;
         throw new GitHubRateLimitError(resetDate);
       }
       throw new GitHubAuthenticationError(

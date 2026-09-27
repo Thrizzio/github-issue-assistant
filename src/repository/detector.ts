@@ -28,7 +28,9 @@ export function parseGitHubUrl(urlOrSlug: string): { owner: string; repo: string
   }
 
   // Pattern 3: HTTPS format: https://[user:pass@]github.com/owner/repo.git
-  const httpsMatch = clean.match(/^https?:\/\/(?:[^@]+@)?github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/);
+  const httpsMatch = clean.match(
+    /^https?:\/\/(?:[^@]+@)?github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/,
+  );
   if (httpsMatch && httpsMatch[1] && httpsMatch[2]) {
     return { owner: httpsMatch[1], repo: httpsMatch[2] };
   }
@@ -82,7 +84,7 @@ export class RepositoryDetector {
         currentCommit,
         rootDir,
       };
-    } catch (err) {
+    } catch {
       // If origin fails, check any remotes
       const remotes = await this.git.getRemotes();
       for (const remote of remotes) {

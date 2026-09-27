@@ -54,7 +54,10 @@ export class ImpactProfiler {
     if (fanOut.level === "HIGH") {
       overallLevel = "HIGH";
       rationale = `Overall HIGH impact driven by wide reference fan-out (${fanOut.evidence}), requiring careful regression testing across multiple callers.`;
-    } else if (valSurface.level === "LOW" && (fanOut.level === "MEDIUM" || churn.level === "HIGH")) {
+    } else if (
+      valSurface.level === "LOW" &&
+      (fanOut.level === "MEDIUM" || churn.level === "HIGH")
+    ) {
       overallLevel = "HIGH";
       rationale = `Overall HIGH impact: modifications touch active or referenced components without direct test coverage to verify behavior.`;
     } else if (fanOut.level === "MEDIUM" || churn.level === "HIGH") {

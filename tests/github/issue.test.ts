@@ -4,7 +4,8 @@ import { extractIssueCandidates } from "../../src/github/issue.js";
 describe("extractIssueCandidates", () => {
   it("extracts backtick symbols with HIGH confidence", () => {
     const title = "Crash in RequestExecutor";
-    const body = "When invoking `RequestExecutor.execute()`, an exception is thrown in `src/api/request.ts`.";
+    const body =
+      "When invoking `RequestExecutor.execute()`, an exception is thrown in `src/api/request.ts`.";
 
     const candidates = extractIssueCandidates(title, body);
 

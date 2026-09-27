@@ -1,25 +1,9 @@
-import {
-  ClassDeclaration,
-  EnumDeclaration,
-  FunctionDeclaration,
-  InterfaceDeclaration,
-  Node,
-  Project,
-  SourceFile,
-  TypeAliasDeclaration,
-  VariableDeclaration,
-} from "ts-morph";
+import { Node, Project } from "ts-morph";
 import { CandidateIdentifier } from "../github/issue.js";
 import { normalizePath, toRelativePath } from "../utils/paths.js";
 
 export type SymbolKind =
-  | "class"
-  | "interface"
-  | "function"
-  | "method"
-  | "variable"
-  | "enum"
-  | "typeAlias";
+  "class" | "interface" | "function" | "method" | "variable" | "enum" | "typeAlias";
 
 export type SymbolConfidence = "HIGH" | "MEDIUM" | "LOW";
 
@@ -46,10 +30,7 @@ export class SymbolDiscovery {
   /**
    * Searches the project AST for symbols relevant to the extracted candidate identifiers and keywords.
    */
-  findCandidateSymbols(
-    candidates: CandidateIdentifier[],
-    maxSymbols = 25,
-  ): DiscoveredSymbol[] {
+  findCandidateSymbols(candidates: CandidateIdentifier[], maxSymbols = 25): DiscoveredSymbol[] {
     const symbols: DiscoveredSymbol[] = [];
     const sourceFiles = this.project.getSourceFiles();
 

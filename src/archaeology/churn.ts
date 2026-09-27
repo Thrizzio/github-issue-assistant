@@ -16,10 +16,7 @@ export class ChurnAnalyzer {
   /**
    * Calculates recent commit churn across relevant files over a time window.
    */
-  async calculateChurn(
-    filePaths: string[],
-    churnMonths = 6,
-  ): Promise<ChurnReport> {
+  async calculateChurn(filePaths: string[], churnMonths = 6): Promise<ChurnReport> {
     if (filePaths.length === 0) {
       return {
         timeWindowMonths: churnMonths,

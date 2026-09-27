@@ -1,6 +1,9 @@
 export abstract class IssuePilotError extends Error {
   abstract readonly code: string;
-  constructor(message: string, public readonly details?: unknown) {
+  constructor(
+    message: string,
+    public readonly details?: unknown,
+  ) {
     super(message);
     this.name = this.constructor.name;
     Object.setPrototypeOf(this, new.target.prototype);
@@ -17,7 +20,6 @@ export class CliError extends IssuePilotError {
     super(message, details);
   }
 }
-
 
 export class GitHubApiError extends IssuePilotError {
   readonly code = "GITHUB_API_ERROR";

@@ -57,7 +57,7 @@ export class GeminiLLMProvider implements LLMProvider {
         throw new LLMProviderError(`Gemini API returned status ${response.status}: ${errorText}`);
       }
 
-      const json = await response.json() as {
+      const json = (await response.json()) as {
         candidates?: Array<{
           content?: {
             parts?: Array<{ text?: string }>;
@@ -134,7 +134,7 @@ export class OpenAILLMProvider implements LLMProvider {
         throw new LLMProviderError(`OpenAI API returned status ${response.status}: ${errorText}`);
       }
 
-      const json = await response.json() as {
+      const json = (await response.json()) as {
         choices?: Array<{
           message?: { content?: string };
         }>;

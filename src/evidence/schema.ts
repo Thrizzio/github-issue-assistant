@@ -50,7 +50,12 @@ export const EvidenceRepositorySchema = z.object({
 });
 export type EvidenceRepository = z.infer<typeof EvidenceRepositorySchema>;
 
-export const EvidenceReferenceTypeSchema = z.enum(["call", "import", "reference", "type_reference"]);
+export const EvidenceReferenceTypeSchema = z.enum([
+  "call",
+  "import",
+  "reference",
+  "type_reference",
+]);
 
 export const EvidenceReferenceSchema = z.object({
   sourceFile: z.string(),

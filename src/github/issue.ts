@@ -32,21 +32,153 @@ export interface IssueEvidence {
 }
 
 const COMMON_STOP_WORDS = new Set([
-  "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
-  "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being",
-  "below", "between", "both", "but", "by", "can", "cannot", "could", "did", "do",
-  "does", "doing", "down", "during", "each", "few", "for", "from", "further",
-  "had", "has", "have", "having", "he", "her", "here", "hers", "herself", "him",
-  "himself", "his", "how", "i", "if", "in", "into", "is", "isn't", "it", "its",
-  "itself", "let", "me", "more", "most", "must", "my", "myself", "no", "nor",
-  "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours",
-  "ourselves", "out", "over", "own", "same", "she", "should", "so", "some", "such",
-  "than", "that", "the", "their", "theirs", "them", "themselves", "then", "there",
-  "these", "they", "this", "those", "through", "to", "too", "under", "until",
-  "up", "very", "was", "wasn't", "we", "were", "what", "when", "where", "which",
-  "while", "who", "whom", "why", "with", "would", "you", "your", "yours", "yourself",
-  "bug", "issue", "fix", "error", "fail", "failed", "failing", "reproduce", "expected",
-  "actual", "steps", "please", "thanks", "hello", "hi", "problem", "help", "version",
+  "a",
+  "about",
+  "above",
+  "after",
+  "again",
+  "against",
+  "all",
+  "am",
+  "an",
+  "and",
+  "any",
+  "are",
+  "aren't",
+  "as",
+  "at",
+  "be",
+  "because",
+  "been",
+  "before",
+  "being",
+  "below",
+  "between",
+  "both",
+  "but",
+  "by",
+  "can",
+  "cannot",
+  "could",
+  "did",
+  "do",
+  "does",
+  "doing",
+  "down",
+  "during",
+  "each",
+  "few",
+  "for",
+  "from",
+  "further",
+  "had",
+  "has",
+  "have",
+  "having",
+  "he",
+  "her",
+  "here",
+  "hers",
+  "herself",
+  "him",
+  "himself",
+  "his",
+  "how",
+  "i",
+  "if",
+  "in",
+  "into",
+  "is",
+  "isn't",
+  "it",
+  "its",
+  "itself",
+  "let",
+  "me",
+  "more",
+  "most",
+  "must",
+  "my",
+  "myself",
+  "no",
+  "nor",
+  "not",
+  "of",
+  "off",
+  "on",
+  "once",
+  "only",
+  "or",
+  "other",
+  "ought",
+  "our",
+  "ours",
+  "ourselves",
+  "out",
+  "over",
+  "own",
+  "same",
+  "she",
+  "should",
+  "so",
+  "some",
+  "such",
+  "than",
+  "that",
+  "the",
+  "their",
+  "theirs",
+  "them",
+  "themselves",
+  "then",
+  "there",
+  "these",
+  "they",
+  "this",
+  "those",
+  "through",
+  "to",
+  "too",
+  "under",
+  "until",
+  "up",
+  "very",
+  "was",
+  "wasn't",
+  "we",
+  "were",
+  "what",
+  "when",
+  "where",
+  "which",
+  "while",
+  "who",
+  "whom",
+  "why",
+  "with",
+  "would",
+  "you",
+  "your",
+  "yours",
+  "yourself",
+  "bug",
+  "issue",
+  "fix",
+  "error",
+  "fail",
+  "failed",
+  "failing",
+  "reproduce",
+  "expected",
+  "actual",
+  "steps",
+  "please",
+  "thanks",
+  "hello",
+  "hi",
+  "problem",
+  "help",
+  "version",
 ]);
 
 /**
@@ -98,7 +230,11 @@ export function extractIssueCandidates(
           confidence: "HIGH",
           reason: `Exact code identifier enclosed in backticks: \`${val}\``,
           source: "inline_code",
-          kindHint: val.endsWith("()") ? "function" : /^[A-Z]/.test(cleanName) ? "class" : undefined,
+          kindHint: val.endsWith("()")
+            ? "function"
+            : /^[A-Z]/.test(cleanName)
+              ? "class"
+              : undefined,
         });
       } else {
         addCandidate({
@@ -112,7 +248,8 @@ export function extractIssueCandidates(
   }
 
   // 2. Extract stack traces and line pointers: e.g. at Foo.bar (src/foo.ts:42:10)
-  const stackTraceRegex = /at\s+(?:([A-Za-z0-9_$]+)\.)?([A-Za-z0-9_$]+)\s+\((?:.*?[/\\])?([A-Za-z0-9_.-]+\.(?:ts|tsx|js|jsx)):(\d+)/g;
+  const stackTraceRegex =
+    /at\s+(?:([A-Za-z0-9_$]+)\.)?([A-Za-z0-9_$]+)\s+\((?:.*?[/\\])?([A-Za-z0-9_.-]+\.(?:ts|tsx|js|jsx)):(\d+)/g;
   while ((match = stackTraceRegex.exec(combinedFullText)) !== null) {
     const className = match[1];
     const methodName = match[2];
@@ -184,7 +321,8 @@ export function extractIssueCandidates(
   }
 
   // 5. Extract file paths: e.g. src/api/request.ts or tests/foo.test.ts
-  const filePathRegex = /(?:^|\s|["'(])([a-zA-Z0-9_\-./]+\.(?:ts|tsx|js|jsx))(?::\d+)?(?:$|\s|["'),])/g;
+  const filePathRegex =
+    /(?:^|\s|["'(])([a-zA-Z0-9_\-./]+\.(?:ts|tsx|js|jsx))(?::\d+)?(?:$|\s|["'),])/g;
   while ((match = filePathRegex.exec(combinedFullText)) !== null) {
     const rawPath = match[1].trim();
     if (rawPath.length >= 3 && !rawPath.startsWith("http")) {
@@ -269,9 +407,9 @@ export class GitHubIssueService {
 
       const title = issueData.title ?? "";
       const body = issueData.body ?? "";
-      const labels = (issueData.labels ?? []).map((l) =>
-        typeof l === "string" ? l : (l.name ?? ""),
-      ).filter(Boolean);
+      const labels = (issueData.labels ?? [])
+        .map((l) => (typeof l === "string" ? l : (l.name ?? "")))
+        .filter(Boolean);
 
       const extractedCandidates = extractIssueCandidates(title, body, comments);
 

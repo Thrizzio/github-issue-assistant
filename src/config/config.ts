@@ -40,7 +40,7 @@ export function loadConfig(rootDir: string = process.cwd()): IssuePilotConfig {
     const rawContent = fs.readFileSync(configPath, "utf-8");
     const json = JSON.parse(rawContent);
     return IssuePilotConfigSchema.parse(json);
-  } catch (error) {
+  } catch {
     // If parsing fails, fall back to default with a warning
     return DEFAULT_CONFIG;
   }

@@ -12,12 +12,20 @@ program
 
 program
   .command("investigate")
-  .description("Investigates a GitHub issue inside a local repository and produces contributor context")
+  .description(
+    "Investigates a GitHub issue inside a local repository and produces contributor context",
+  )
   .argument("<issue-number>", "GitHub issue number to investigate")
-  .option("--repo <owner/repo>", "GitHub repository in owner/repo format (overrides Git remote detection)")
+  .option(
+    "--repo <owner/repo>",
+    "GitHub repository in owner/repo format (overrides Git remote detection)",
+  )
   .option("--token <token>", "GitHub Personal Access Token (defaults to GITHUB_TOKEN env var)")
   .option("--no-llm", "Disable LLM synthesis and emit purely deterministic repository evidence")
-  .option("--output <path>", "Output path for the generated markdown report (defaults to .github/CONTRIBUTOR_CONTEXT.md)")
+  .option(
+    "--output <path>",
+    "Output path for the generated markdown report (defaults to .github/CONTRIBUTOR_CONTEXT.md)",
+  )
   .option("--json", "Output the raw EvidenceGraph JSON to stdout")
   .option("--verbose", "Enable verbose debug logging")
   .action(async (issueNumberStr: string, options) => {

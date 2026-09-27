@@ -97,7 +97,6 @@ export class GitClient {
     }
   }
 
-
   /**
    * Runs git log with GIT_LOG_FORMAT and returns parsed GitCommit array.
    */
@@ -147,4 +146,3 @@ export class GitClient {
     return this.logCommits(["--since", sinceDate, "--", ...filePaths]);
   }
 }
-

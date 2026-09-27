@@ -1,10 +1,7 @@
 import chalk from "chalk";
 import { EvidenceGraph } from "../evidence/schema.js";
 
-export function formatTerminalSummary(
-  evidence: EvidenceGraph,
-  outputPath: string,
-): string {
+export function formatTerminalSummary(evidence: EvidenceGraph, outputPath: string): string {
   const lines: string[] = [];
 
   lines.push("");
@@ -26,7 +23,9 @@ export function formatTerminalSummary(
     const prov = evidence.provenance.find((p) => p.symbolName === primarySym.name);
 
     lines.push(`  Primary Symbol:   ${chalk.cyan(primarySym.name)}`);
-    lines.push(`  Location:         ${chalk.gray(`${primarySym.filePath}:${primarySym.startLine}`)}`);
+    lines.push(
+      `  Location:         ${chalk.gray(`${primarySym.filePath}:${primarySym.startLine}`)}`,
+    );
     if (prov?.probableIntroducingCommit) {
       lines.push(
         `  Probable Origin:  ${chalk.green(prov.probableIntroducingCommit.shortSha)} (${prov.probableIntroducingCommit.date})`,
@@ -55,7 +54,9 @@ export function formatTerminalSummary(
   lines.push(chalk.bold("Impact Profile"));
   lines.push(`  Fan-out:            ${colorLevel(evidence.impactProfile.referenceFanOut.level)}`);
   lines.push(`  Churn:               ${colorLevel(evidence.impactProfile.historicalChurn.level)}`);
-  lines.push(`  Validation Surface:  ${colorLevel(evidence.impactProfile.validationSurface.level)}`);
+  lines.push(
+    `  Validation Surface:  ${colorLevel(evidence.impactProfile.validationSurface.level)}`,
+  );
   lines.push(`  Overall Impact:      ${colorLevel(evidence.impactProfile.overallImpact.level)}`);
   lines.push("");
 

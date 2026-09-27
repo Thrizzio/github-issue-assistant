@@ -1,5 +1,4 @@
 import ora from "ora";
-import path from "node:path";
 import { ChurnAnalyzer } from "../../archaeology/churn.js";
 import { GitClient } from "../../archaeology/git.js";
 import { ProvenanceAnalyzer } from "../../archaeology/provenance.js";
@@ -67,7 +66,9 @@ export async function runInvestigate(
     );
 
     // 2. Fetch GitHub issue and comments
-    spinner.start(`Fetching GitHub issue #${issueNumber} from ${repoCoords.owner}/${repoCoords.name}...`);
+    spinner.start(
+      `Fetching GitHub issue #${issueNumber} from ${repoCoords.owner}/${repoCoords.name}...`,
+    );
     const ghClient = new GitHubClient({ token: options.token });
     const issueService = new GitHubIssueService(ghClient);
     const prService = new PullRequestService(ghClient);
@@ -142,9 +143,7 @@ export async function runInvestigate(
       discoveredSymbols.slice(0, 5).map((sym) => provenanceAnalyzer.analyzeSymbolProvenance(sym)),
     );
 
-    const relevantFiles = Array.from(
-      new Set(discoveredSymbols.map((s) => s.filePath)),
-    );
+    const relevantFiles = Array.from(new Set(discoveredSymbols.map((s) => s.filePath)));
     const churnAnalyzer = new ChurnAnalyzer(git);
     const churnReport = await churnAnalyzer.calculateChurn(
       relevantFiles,
@@ -182,7 +181,11 @@ export async function runInvestigate(
     spinner.succeed(`EvidenceGraph serialized: ${toRelativePath(rootDir, serializedJsonPath)}`);
 
     // 11. LLM Synthesis or deterministic fallback
-    spinner.start(options.noLlm ? "Generating deterministic contributor brief..." : "Synthesizing contributor brief...");
+    spinner.start(
+      options.noLlm
+        ? "Generating deterministic contributor brief..."
+        : "Synthesizing contributor brief...",
+    );
     const synthesizer = new Synthesizer();
     const synthesisResult = await synthesizer.synthesize(evidenceGraph, {
       noLlm: options.noLlm,

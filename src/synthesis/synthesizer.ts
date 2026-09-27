@@ -20,10 +20,7 @@ export class Synthesizer {
   /**
    * Generates a contributor brief either via LLM or deterministic fallback.
    */
-  async synthesize(
-    evidence: EvidenceGraph,
-    options?: SynthesisOptions,
-  ): Promise<SynthesisResult> {
+  async synthesize(evidence: EvidenceGraph, options?: SynthesisOptions): Promise<SynthesisResult> {
     if (options?.noLlm) {
       return {
         brief: this.generateDeterministicBrief(
@@ -72,12 +69,10 @@ export class Synthesizer {
   /**
    * Generates a fully deterministic brief directly from EvidenceGraph data.
    */
-  generateDeterministicBrief(
-    evidence: EvidenceGraph,
-    fallbackNotice?: string,
-  ): ContributorBrief {
+  generateDeterministicBrief(evidence: EvidenceGraph, fallbackNotice?: string): ContributorBrief {
     // 1. Observed problem
-    const observedProblem = `Issue #${evidence.issue.number}: ${evidence.issue.title}\n\n` +
+    const observedProblem =
+      `Issue #${evidence.issue.number}: ${evidence.issue.title}\n\n` +
       `Reported by @${evidence.issue.author} on ${evidence.issue.createdAt}.\n\n` +
       `Explicit problem description:\n${evidence.issue.body.trim() || "(No issue body provided)"}`;
 
@@ -112,7 +107,7 @@ export class Synthesizer {
 
       return {
         claim: `Symbol \`${sym.name}\` in \`${sym.filePath}\` is a primary candidate for implementing or fixing this issue.`,
-        confidence: sym.confidence === "HIGH" ? "HIGH" as const : "MEDIUM" as const,
+        confidence: sym.confidence === "HIGH" ? ("HIGH" as const) : ("MEDIUM" as const),
         evidence: evidenceItems,
       };
     });
@@ -120,7 +115,9 @@ export class Synthesizer {
     // 4. Existing patterns
     const existingPatterns: string[] = [];
     for (const rel of evidence.relationships.slice(0, 10)) {
-      existingPatterns.push(`\`${rel.from}\` ${rel.type} \`${rel.to}\`${rel.context ? ` (${rel.context})` : ""}`);
+      existingPatterns.push(
+        `\`${rel.from}\` ${rel.type} \`${rel.to}\`${rel.context ? ` (${rel.context})` : ""}`,
+      );
     }
 
     // 5. Validation strategy
@@ -144,18 +141,26 @@ export class Synthesizer {
       `Issue #${evidence.issue.number} verified with state "${evidence.issue.state}" and ${evidence.issue.comments.length} comment(s)`,
       ...evidence.symbols
         .filter((s) => s.confidence === "HIGH")
-        .map((s) => `Verified symbol \`${s.name}\` located at \`${s.filePath}:${s.startLine}\` with ${s.referenceCount} reference(s)`),
+        .map(
+          (s) =>
+            `Verified symbol \`${s.name}\` located at \`${s.filePath}:${s.startLine}\` with ${s.referenceCount} reference(s)`,
+        ),
     ];
 
     const mediumConfidence: string[] = [
       ...evidence.symbols
         .filter((s) => s.confidence === "MEDIUM")
-        .map((s) => `Candidate symbol \`${s.name}\` identified in \`${s.filePath}\` (${s.discoveryReason})`),
+        .map(
+          (s) =>
+            `Candidate symbol \`${s.name}\` identified in \`${s.filePath}\` (${s.discoveryReason})`,
+        ),
       `Impact assessment: reference fan-out (${evidence.impactProfile.referenceFanOut.level}), churn (${evidence.impactProfile.historicalChurn.level}), validation surface (${evidence.impactProfile.validationSurface.level})`,
     ];
 
     const uncertainOpenQuestions: string[] = [
-      ...evidence.issue.extractedKeywords.slice(0, 5).map((kw) => `Relevance of keyword "${kw}" to final architectural resolution`),
+      ...evidence.issue.extractedKeywords
+        .slice(0, 5)
+        .map((kw) => `Relevance of keyword "${kw}" to final architectural resolution`),
       "Detailed edge cases or breaking change constraints not explicitly specified in the GitHub issue description",
     ];
 

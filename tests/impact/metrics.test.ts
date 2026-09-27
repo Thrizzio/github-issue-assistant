@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  classifyChurn,
-  classifyFanOut,
-  IMPACT_THRESHOLDS,
-} from "../../src/impact/metrics.js";
+import { classifyChurn, classifyFanOut } from "../../src/impact/metrics.js";
 import { ImpactProfiler } from "../../src/impact/profile.js";
 
 describe("Impact Metrics & Classification", () => {
