@@ -96,4 +96,55 @@ export class GitClient {
       return [];
     }
   }
+
+
+  /**
+   * Runs git log with GIT_LOG_FORMAT and returns parsed GitCommit array.
+   */
+  async logCommits(extraArgs: string[]): Promise<import("./commits.js").GitCommit[]> {
+    const { GIT_LOG_FORMAT, parseGitLogOutput } = await import("./commits.js");
+    const args = ["log", `--format=${GIT_LOG_FORMAT}`, ...extraArgs];
+    try {
+      const output = await this.exec(args);
+      return parseGitLogOutput(output);
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Uses git log -S to find commits that introduced or removed occurrences of a symbol.
+   */
+  async logPickaxe(
+    symbolName: string,
+    filePath?: string,
+  ): Promise<import("./commits.js").GitCommit[]> {
+    const extraArgs = ["-S", symbolName, "-M", "-C"];
+    if (filePath) {
+      extraArgs.push("--follow", "--", filePath);
+    }
+    return this.logCommits(extraArgs);
+  }
+
+  /**
+   * Returns commit history for a specific file.
+   */
+  async getFileHistory(
+    filePath: string,
+    maxCount = 20,
+  ): Promise<import("./commits.js").GitCommit[]> {
+    return this.logCommits(["-n", String(maxCount), "--follow", "--", filePath]);
+  }
+
+  /**
+   * Returns commits touching the specified files since a given date.
+   */
+  async getCommitsSince(
+    filePaths: string[],
+    sinceDate: string,
+  ): Promise<import("./commits.js").GitCommit[]> {
+    if (filePaths.length === 0) return [];
+    return this.logCommits(["--since", sinceDate, "--", ...filePaths]);
+  }
 }
+
