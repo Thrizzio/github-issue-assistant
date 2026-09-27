@@ -11,6 +11,14 @@ export class GenericIssuePilotError extends IssuePilotError {
   readonly code = "INTERNAL_ERROR";
 }
 
+export class CliError extends IssuePilotError {
+  readonly code = "CLI_ERROR";
+  constructor(message: string, details?: unknown) {
+    super(message, details);
+  }
+}
+
+
 export class GitHubApiError extends IssuePilotError {
   readonly code = "GITHUB_API_ERROR";
   constructor(message: string, details?: unknown) {
